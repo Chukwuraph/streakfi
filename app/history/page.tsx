@@ -127,7 +127,7 @@ export default function HistoryPage() {
               <tr className="text-[10px] uppercase tracking-widest font-black text-on-surface-variant">
                 <th className="px-4 md:px-6 py-4">Date</th>
                 <th className="px-4 md:px-6 py-4">Event</th>
-                <th className="px-4 md:px-6 py-4 hidden md:table-cell">Pair</th>
+                <th className="px-4 md:px-6 py-4 hidden md:table-cell">Pair / Tx</th>
                 <th className="px-4 md:px-6 py-4 text-right hidden md:table-cell">Volume</th>
                 <th className="px-4 md:px-6 py-4 text-right">Status</th>
               </tr>
@@ -140,23 +140,42 @@ export default function HistoryPage() {
                   </td>
                 </tr>
               )}
-              {(data?.activity ?? []).map((evt) => (
-                <tr key={evt.id} className="border-t border-outline-variant/10 hover:bg-surface-container-low transition-colors">
-                  <td className="px-4 md:px-6 py-4 font-mono text-xs text-on-surface-variant">
-                    {new Date(evt.timestamp).toISOString().replace("T", " ").slice(0, 16)}
-                  </td>
-                  <td className="px-4 md:px-6 py-4 font-bold uppercase text-xs">{evt.type.replaceAll("_", " ")}</td>
-                  <td className="px-4 md:px-6 py-4 hidden md:table-cell font-bold">{(evt.data.pair as string) ?? "—"}</td>
-                  <td className="px-4 md:px-6 py-4 text-right hidden md:table-cell">
-                    {evt.data.volume != null ? `$${Number(evt.data.volume).toLocaleString()}` : "—"}
-                  </td>
-                  <td className="px-4 md:px-6 py-4 text-right">
-                    <span className="bg-tertiary-container/20 text-tertiary px-2 py-1 rounded text-[10px] font-black uppercase tracking-widest">
-                      Confirmed
-                    </span>
-                  </td>
-                </tr>
-              ))}
+              {(data?.activity ?? []).map((evt) => {
+                const sig = evt.data.signature as string | undefined;
+                const onchain = Boolean(evt.data.onchain);
+                return (
+                  <tr key={evt.id} className="border-t border-outline-variant/10 hover:bg-surface-container-low transition-colors">
+                    <td className="px-4 md:px-6 py-4 font-mono text-xs text-on-surface-variant">
+                      {new Date(evt.timestamp).toISOString().replace("T", " ").slice(0, 16)}
+                    </td>
+                    <td className="px-4 md:px-6 py-4 font-bold uppercase text-xs">{evt.type.replaceAll("_", " ")}</td>
+                    <td className="px-4 md:px-6 py-4 hidden md:table-cell font-bold">
+                      {sig ? (
+                        <a
+                          href={`https://solscan.io/tx/${sig}`}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="text-secondary underline font-mono text-xs"
+                        >
+                          {sig.slice(0, 6)}…{sig.slice(-4)}
+                        </a>
+                      ) : (
+                        (evt.data.pair as string) ?? "—"
+                      )}
+                    </td>
+                    <td className="px-4 md:px-6 py-4 text-right hidden md:table-cell">
+                      {evt.data.volume != null ? `$${Number(evt.data.volume).toLocaleString()}` : "—"}
+                    </td>
+                    <td className="px-4 md:px-6 py-4 text-right">
+                      <span
+                        className={`px-2 py-1 rounded text-[10px] font-black uppercase tracking-widest ${onchain ? "bg-secondary-container/40 text-secondary" : "bg-tertiary-container/20 text-tertiary"}`}
+                      >
+                        {onchain ? "On-chain" : "Confirmed"}
+                      </span>
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>

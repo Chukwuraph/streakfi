@@ -12,6 +12,7 @@ import { StreakAtRiskBanner } from "@/components/StreakAtRiskBanner";
 import { useFocusRefresh } from "@/components/useFocusRefresh";
 import { useResetOnWallet } from "@/components/useResetOnWallet";
 import { getStoredReferral, clearStoredReferral } from "@/components/ReferralTracker";
+import { VerifySwap } from "@/components/VerifySwap";
 
 interface StreakResponse {
   wallet: string;
@@ -216,6 +217,8 @@ export default function DashboardPage() {
         />
       </section>
 
+      <VerifySwap wallet={wallet} isDemo={isDemo} onImported={fetchAll} />
+
       {/* Activity + Torque engine */}
       <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 pb-16">
         <div className="lg:col-span-8">
@@ -388,9 +391,14 @@ function titleFor(type: string): string {
   }
 }
 function detailFor(e: { type: string; data: Record<string, string | number | boolean> }): string {
-  if (e.type === "streak_maintained") return `${e.data.pair ?? "SOL/USDC"} • Volume $${(e.data.volume as number)?.toLocaleString?.() ?? e.data.volume ?? 0}`;
+  if (e.type === "streak_maintained") {
+    const onchain = e.data.onchain ? " • ⛓ on-chain" : "";
+    const vol = (e.data.volume as number)?.toLocaleString?.() ?? e.data.volume ?? 0;
+    return `${e.data.pair ?? "SOL/USDC"} • Volume $${vol}${onchain}`;
+  }
   if (e.type === "streak_shared") return `Shared milestone: ${e.data.streak_length ?? ""} days`;
   if (e.type === "streak_broken") return "Verified broken by Torque";
+  if (e.type === "referral_converted") return `Referred wallet hit day 3 (+1 ticket)`;
   return JSON.stringify(e.data);
 }
 function toneFor(type: string): "tertiary" | "primary" | "secondary" {
