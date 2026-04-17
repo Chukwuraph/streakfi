@@ -2,7 +2,11 @@ import fs from "fs/promises";
 import path from "path";
 import type { StreakEvent, WalletRecord } from "./types";
 
-const DATA_DIR = path.join(process.cwd(), "data");
+// On Vercel/serverless the project filesystem is read-only; only `/tmp` is writable
+// (ephemeral per-instance, ~512 MB). In dev we use `./data` for easy inspection.
+// Swap this for Vercel KV / Upstash Redis / Postgres for durable multi-instance state.
+const IS_SERVERLESS = Boolean(process.env.VERCEL);
+const DATA_DIR = IS_SERVERLESS ? "/tmp/streakfi" : path.join(process.cwd(), "data");
 const EVENTS_FILE = path.join(DATA_DIR, "events.json");
 const WALLETS_FILE = path.join(DATA_DIR, "wallets.json");
 
