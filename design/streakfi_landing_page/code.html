@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>StreakFi | Trade Daily. Earn More.</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-low": "#141b2b",
+                    "on-primary-container": "#582200",
+                    "on-tertiary-fixed": "#002109",
+                    "on-secondary-fixed-variant": "#2f2ebe",
+                    "surface-variant": "#2e3545",
+                    "on-tertiary-fixed-variant": "#005320",
+                    "on-primary": "#552100",
+                    "inverse-surface": "#dce2f7",
+                    "tertiary": "#62df7d",
+                    "on-primary-fixed-variant": "#783200",
+                    "secondary-fixed": "#e1e0ff",
+                    "surface-container-high": "#232a3a",
+                    "tertiary-container": "#2cb055",
+                    "outline": "#a78b7d",
+                    "surface-container-highest": "#2e3545",
+                    "secondary-fixed-dim": "#c0c1ff",
+                    "primary-fixed": "#ffdbca",
+                    "tertiary-fixed": "#7ffc97",
+                    "surface-dim": "#0c1322",
+                    "on-error": "#690005",
+                    "surface-tint": "#ffb690",
+                    "on-secondary": "#1000a9",
+                    "secondary-container": "#3131c0",
+                    "on-surface-variant": "#e0c0b1",
+                    "on-primary-fixed": "#341100",
+                    "tertiary-fixed-dim": "#62df7d",
+                    "primary": "#ffb690",
+                    "on-surface": "#dce2f7",
+                    "inverse-on-surface": "#293040",
+                    "on-error-container": "#ffdad6",
+                    "secondary": "#c0c1ff",
+                    "on-background": "#dce2f7",
+                    "surface-container-lowest": "#070e1d",
+                    "error-container": "#93000a",
+                    "background": "#0c1322",
+                    "primary-container": "#f97316",
+                    "surface-bright": "#323949",
+                    "on-secondary-fixed": "#07006c",
+                    "outline-variant": "#584237",
+                    "on-secondary-container": "#b0b2ff",
+                    "inverse-primary": "#9d4300",
+                    "primary-fixed-dim": "#ffb690",
+                    "on-tertiary-container": "#003b15",
+                    "on-tertiary": "#003914",
+                    "error": "#ffb4ab",
+                    "surface-container": "#191f2f",
+                    "surface": "#0c1322"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Inter"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .kinetic-gradient-bg {
+            background: radial-gradient(circle at 20% 30%, rgba(249, 115, 22, 0.15) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 70%, rgba(49, 49, 192, 0.15) 0%, transparent 50%);
+        }
+        .glass-panel {
+            background: rgba(46, 53, 69, 0.4);
+            backdrop-filter: blur(20px);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full z-50 bg-[#0c1322]/80 backdrop-blur-xl shadow-[0_0_20px_rgba(249,115,22,0.08)]">
+<nav class="flex justify-between items-center px-6 h-20 max-w-7xl mx-auto">
+<div class="text-2xl font-black text-orange-500 tracking-tighter uppercase">StreakFi</div>
+<!-- Desktop Navigation -->
+<div class="hidden md:flex items-center space-x-8">
+<a class="text-orange-500 border-b-2 border-orange-500 pb-1 font-black tracking-tighter uppercase" href="#">Home</a>
+<a class="text-slate-400 font-medium hover:text-slate-200 hover:bg-white/5 transition-all duration-300 px-3 py-1 rounded-lg uppercase tracking-tighter" href="#">Leaderboard</a>
+<a class="text-slate-400 font-medium hover:text-slate-200 hover:bg-white/5 transition-all duration-300 px-3 py-1 rounded-lg uppercase tracking-tighter" href="#">Rewards</a>
+</div>
+<button class="bg-primary-container text-on-primary-container font-black px-6 py-2 rounded-xl active:scale-95 transition-transform uppercase tracking-tight shadow-[0_0_12px_rgba(249,115,22,0.3)]">
+                Connect Wallet
+            </button>
+</nav>
+</header>
+<main class="relative pt-20 kinetic-gradient-bg min-h-screen overflow-hidden">
+<!-- Hero Section -->
+<section class="max-w-7xl mx-auto px-6 pt-24 pb-16 relative">
+<div class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-primary-container/10 rounded-full blur-[120px] pointer-events-none"></div>
+<div class="relative z-10 text-center space-y-8">
+<div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-surface-container-highest border border-outline-variant/20 mb-4">
+<span class="material-symbols-outlined text-primary text-sm" style="font-variation-settings: 'FILL' 1;">local_fire_department</span>
+<span class="text-label-md font-bold text-primary uppercase tracking-widest text-xs">Momentum Engine Active</span>
+</div>
+<h1 class="text-7xl md:text-9xl font-black tracking-tighter uppercase leading-[0.85] text-on-surface">
+                    Trade Daily.<br/>
+<span class="text-transparent bg-clip-text bg-gradient-to-br from-primary to-primary-container">Earn More.</span>
+</h1>
+<p class="max-w-2xl mx-auto text-xl text-on-surface-variant font-medium leading-relaxed">
+                    Rewards consistent Solana traders via <span class="text-secondary font-bold">Torque Protocol</span>. Turn your daily volume into unstoppable yield and exclusive rebates.
+                </p>
+<div class="pt-8">
+<button class="group relative bg-gradient-to-br from-primary to-primary-container text-on-primary-container text-2xl font-black px-12 py-6 rounded-2xl shadow-[0_0_32px_rgba(249,115,22,0.2)] hover:shadow-[0_0_48px_rgba(249,115,22,0.4)] transition-all active:scale-95 uppercase tracking-tighter flex items-center gap-4 mx-auto">
+                        Start My Streak 
+                        <span class="material-symbols-outlined font-black group-hover:translate-x-2 transition-transform">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Stats Bar -->
+<div class="mt-24 grid grid-cols-1 md:grid-cols-2 gap-4 max-w-4xl mx-auto">
+<div class="glass-panel p-8 rounded-3xl border-t-2 border-primary/20 flex items-center justify-between">
+<div>
+<p class="text-label-md text-primary font-bold uppercase tracking-widest mb-1">Active Streaks</p>
+<h2 class="text-4xl font-black text-on-surface tracking-tighter">1,240</h2>
+</div>
+<span class="material-symbols-outlined text-primary text-5xl opacity-50" style="font-variation-settings: 'FILL' 1;">local_fire_department</span>
+</div>
+<div class="glass-panel p-8 rounded-3xl border-t-2 border-secondary/20 flex items-center justify-between">
+<div>
+<p class="text-label-md text-secondary font-bold uppercase tracking-widest mb-1">Rewards Distributed</p>
+<h2 class="text-4xl font-black text-on-surface tracking-tighter">$450K</h2>
+</div>
+<span class="material-symbols-outlined text-secondary text-5xl opacity-50" style="font-variation-settings: 'FILL' 1;">payments</span>
+</div>
+</div>
+</section>
+<!-- How It Works - Bento Grid -->
+<section class="max-w-7xl mx-auto px-6 py-32">
+<div class="mb-16">
+<h2 class="text-4xl font-black uppercase tracking-tighter text-on-surface mb-2">The Kinetic Process</h2>
+<div class="w-24 h-2 bg-primary-container"></div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- Step 1 -->
+<div class="bg-surface-container-low p-10 rounded-[2rem] relative overflow-hidden group">
+<div class="absolute -top-10 -right-10 w-40 h-40 bg-primary/5 rounded-full blur-3xl group-hover:bg-primary/10 transition-colors"></div>
+<div class="relative z-10">
+<span class="text-6xl font-black text-outline-variant/30 absolute -top-4 -left-2 tracking-tighter">01</span>
+<div class="mt-12 space-y-4">
+<h3 class="text-3xl font-black uppercase tracking-tight text-on-surface">Connect Wallet</h3>
+<p class="text-on-surface-variant leading-relaxed">Securely link your Solana wallet to start tracking your daily trading activity and volume history.</p>
+</div>
+</div>
+</div>
+<!-- Step 2 -->
+<div class="bg-surface-container-low p-10 rounded-[2rem] relative overflow-hidden group border-t-2 border-secondary/10">
+<div class="absolute -top-10 -right-10 w-40 h-40 bg-secondary/5 rounded-full blur-3xl group-hover:bg-secondary/10 transition-colors"></div>
+<div class="relative z-10">
+<span class="text-6xl font-black text-outline-variant/30 absolute -top-4 -left-2 tracking-tighter">02</span>
+<div class="mt-12 space-y-4">
+<h3 class="text-3xl font-black uppercase tracking-tight text-on-surface">Trade on Raydium</h3>
+<p class="text-on-surface-variant leading-relaxed">Execute swaps on Raydium. Every day you trade increases your multiplier and fuels your Streak flame.</p>
+</div>
+</div>
+</div>
+<!-- Step 3 -->
+<div class="bg-surface-container-highest p-10 rounded-[2rem] relative overflow-hidden group shadow-2xl">
+<div class="absolute -top-10 -right-10 w-40 h-40 bg-tertiary/10 rounded-full blur-3xl"></div>
+<div class="relative z-10">
+<span class="text-6xl font-black text-tertiary/20 absolute -top-4 -left-2 tracking-tighter">03</span>
+<div class="mt-12 space-y-4">
+<h3 class="text-3xl font-black uppercase tracking-tight text-tertiary">Earn Rewards</h3>
+<p class="text-on-surface-variant leading-relaxed">Unlock access to daily raffles, volume rebates, and climb the global leaderboard for massive prize pools.</p>
+<div class="flex gap-2 pt-4">
+<span class="bg-tertiary-container/20 text-tertiary px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border border-tertiary/30">Rebates</span>
+<span class="bg-tertiary-container/20 text-tertiary px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border border-tertiary/30">Raffles</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Kinetic CTA / Visual Section -->
+<section class="max-w-7xl mx-auto px-6 py-32">
+<div class="bg-surface-container-lowest rounded-[3rem] p-12 md:p-24 overflow-hidden relative border border-outline-variant/10">
+<div class="absolute inset-0 opacity-40">
+<img alt="Abstract digital network" class="w-full h-full object-cover" data-alt="Futuristic digital network of glowing orange and indigo particles moving in a dark cybernetic void with high motion blur" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBD_E2je6GzQPyjgT9c2KQ_YjYui0loEqFcp9bSkHrrldIBKKMdwVTGcsxkuoiGRYVsDywgf-cjM3GxU6oMOKru37iWDPxDtpUiTHAErmhQM8AUnVSFz_lRiFLWIEpBhlmAV9WXk5D_39-OrQ2r-z5clfZqOaF40QFyD4Qr-iylkhjtZjTBs-c-kypAT_IZ_ncORRjTBdgQV6aZzRirHshzcX3AZstTQLK83HWvZsLXg_l1VM3Edz8I-I87_m-8eUr4ebORe02XoxA"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest via-surface-container-lowest/80 to-transparent"></div>
+</div>
+<div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-12">
+<div class="max-w-xl">
+<div class="bg-secondary-container text-on-secondary-container px-4 py-2 rounded-xl inline-block font-black text-xs uppercase tracking-[0.2em] mb-6">
+                            Verified via Torque Protocol
+                        </div>
+<h2 class="text-5xl md:text-7xl font-black uppercase tracking-tighter text-on-surface mb-8 leading-none">
+                            Ready to ignite your yield?
+                        </h2>
+<button class="bg-on-surface text-surface font-black px-12 py-5 rounded-2xl uppercase tracking-tighter hover:bg-primary hover:text-on-primary transition-colors text-xl">
+                            Join the Waitlist
+                        </button>
+</div>
+<div class="bg-surface-bright/50 backdrop-blur-3xl p-8 rounded-[2rem] border border-white/5 shadow-2xl flex flex-col gap-6 w-full max-w-sm">
+<div class="flex justify-between items-end border-b border-white/10 pb-4">
+<span class="text-label-md font-bold uppercase tracking-widest text-slate-400">Yield Multiplier</span>
+<span class="text-4xl font-black text-tertiary tracking-tighter">x2.4</span>
+</div>
+<div class="flex justify-between items-end border-b border-white/10 pb-4">
+<span class="text-label-md font-bold uppercase tracking-widest text-slate-400">Current Streak</span>
+<span class="text-4xl font-black text-primary tracking-tighter">14 Days</span>
+</div>
+<div class="flex justify-between items-end">
+<span class="text-label-md font-bold uppercase tracking-widest text-slate-400">Status</span>
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 bg-tertiary rounded-full animate-pulse shadow-[0_0_8px_#62df7d]"></div>
+<span class="text-xl font-black text-on-surface uppercase tracking-tighter">Elite</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="fixed bottom-0 w-full h-10 bg-[#141b2b] border-t-2 border-[#2e3545] flex justify-between items-center px-8 z-40">
+<div class="flex items-center gap-4">
+<span class="text-indigo-400 font-black text-xs uppercase tracking-widest">StreakFi</span>
+<span class="text-slate-500 text-xs font-bold uppercase tracking-widest">Powered by Torque Protocol</span>
+</div>
+<div class="flex items-center gap-8">
+<span class="text-slate-500 text-xs font-bold uppercase tracking-widest hover:text-white cursor-default transition-colors">Total Streaks: 1.2M</span>
+<span class="text-slate-500 text-xs font-bold uppercase tracking-widest hover:text-white cursor-default transition-colors">Live Rewards: $450K</span>
+</div>
+<div class="flex gap-4 items-center">
+<img alt="Solana" class="h-4 w-4 grayscale opacity-50 hover:grayscale-0 hover:opacity-100 transition-all cursor-pointer" data-alt="Solana blockchain logo minimal icon" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDNVW4BN-S48CrtpK35OkzQ6pv5l69dOo2lQF4C2xGoZhjXADQif_4-Z2BmOIyPIH3EUV7JJOjNCJjC-h8iZ2Z7JFW7BNig2DGeVRJJgZY3xIw7y-66bL09uoSi-YFxhhylIaiClq-owbZ_JC5g88L8-yIp5Z8BjWs8exGXbA8tFPaLEBkjsb097hSxRmavJ5_pKzqAzdyRRDppumj5RDdBJnLqmt_-sccc15FKlEsBaVUB51icMZFvnlJDaNdF1Yd-LyvREXDNlYI"/>
+<img alt="Raydium" class="h-4 w-4 grayscale opacity-50 hover:grayscale-0 hover:opacity-100 transition-all cursor-pointer" data-alt="Raydium protocol logo minimal icon" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAnXiui0Jnecv_xPuRKWP4GKc7UvcoSdSl_1MrVkR1305IqOEqc13z3WUUstBTdjbky72HqU12cRKtIta7WCikUVhFOlJN6N1WRbotDI_hQYpfVdvfLhGqj2kTJw2Zzk-NDVrnEs9fW0k8i9EYQ2qsq2v3L4-gLk_mG5XJQ-eAzXkUZTuzu1qORxvzsO---JQXKrlnRNuHLY2ehoV0bAzb9YQdjg8BHI7HjGQlISwmo7B4sa-uJJo3hr6GTTsAwyFrSCMzlZQYFUTE"/>
+</div>
+</footer>
+</body></html>
