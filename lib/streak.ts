@@ -71,7 +71,10 @@ export function computeStreakFromEvents(events: StreakEvent[]): {
       }
     }
   }
-  const lastTrade = events[events.length - 1]?.timestamp ?? latest;
+  const qualifying = events.filter(
+    (e) => e.type === "streak_maintained" || e.type === "swap_confirmed",
+  );
+  const lastTrade = qualifying.reduce((acc, e) => Math.max(acc, e.timestamp), 0) || latest;
   return {
     currentStreak: current,
     longestStreak: longest,

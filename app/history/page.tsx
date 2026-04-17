@@ -5,6 +5,7 @@ import clsx from "clsx";
 import { useActiveWallet } from "@/components/ActiveWallet";
 import { TorqueBadge } from "@/components/TorqueBadge";
 import { useFocusRefresh } from "@/components/useFocusRefresh";
+import { useResetOnWallet } from "@/components/useResetOnWallet";
 
 interface StreakResponse {
   record: {
@@ -43,6 +44,7 @@ export default function HistoryPage() {
   }, [load]);
 
   useFocusRefresh(load);
+  useResetOnWallet(wallet, () => setData(null));
 
   const tradeDays = new Set(
     (data?.activity ?? [])

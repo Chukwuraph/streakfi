@@ -7,6 +7,7 @@ import { useActiveWallet } from "@/components/ActiveWallet";
 import { TorqueBadge } from "@/components/TorqueBadge";
 import { useToast } from "@/components/ToastProvider";
 import { useFocusRefresh } from "@/components/useFocusRefresh";
+import { useResetOnWallet } from "@/components/useResetOnWallet";
 
 interface RaffleData {
   myTickets: number;
@@ -51,6 +52,7 @@ export default function RewardsPage() {
   }, [load]);
 
   useFocusRefresh(load);
+  useResetOnWallet(wallet, () => setRaffle(null), () => setRebate(null));
 
   const claim = useCallback(async () => {
     if (!rebate || rebate.pending <= 0) return;

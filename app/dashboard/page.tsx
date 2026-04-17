@@ -10,6 +10,7 @@ import { useToast } from "@/components/ToastProvider";
 import { LiveCountdown } from "@/components/LiveCountdown";
 import { StreakAtRiskBanner } from "@/components/StreakAtRiskBanner";
 import { useFocusRefresh } from "@/components/useFocusRefresh";
+import { useResetOnWallet } from "@/components/useResetOnWallet";
 import { getStoredReferral, clearStoredReferral } from "@/components/ReferralTracker";
 
 interface StreakResponse {
@@ -66,6 +67,7 @@ export default function DashboardPage() {
   }, [fetchAll]);
 
   useFocusRefresh(fetchAll);
+  useResetOnWallet(wallet, () => setData(null), () => setLb(null), () => setLastSeenStreak(null));
 
   useEffect(() => {
     if (!data) return;
@@ -128,7 +130,10 @@ export default function DashboardPage() {
           <span className="material-symbols-outlined text-secondary text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>
             visibility
           </span>
-          Viewing demo wallet data. Connect your Solana wallet to track a real streak.
+          <span>
+            <span className="font-black uppercase tracking-widest text-[10px] md:text-xs">Demo mode</span>{" "}
+            — showing a seeded 15-day streak so you can explore the UI. Connect your Solana wallet and your data switches in instantly.
+          </span>
         </div>
       )}
 

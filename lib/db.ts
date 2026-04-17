@@ -112,18 +112,49 @@ function mkWallet(
 }
 
 function seedEvents(): StreakEvent[] {
-  const now = Date.now();
   const day = 86_400_000;
+  const hour = 3_600_000;
   const wallet = "0x982233ccddeea4f2";
+  const pairs = ["SOL/USDC", "JTO/USDC", "RAY/USDC", "BONK/USDC", "mSOL/USDC"];
+
+  // Anchor each day to 12:00 UTC so the latest event is always "today" (status=safe),
+  // regardless of when the seed is generated in any timezone.
+  const d = new Date();
+  const todayNoonUtc = Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate(), 12);
+
   const events: StreakEvent[] = [];
+
   for (let i = 14; i >= 0; i--) {
     events.push({
-      id: `seed-${i}`,
+      id: `seed-swap-${i}`,
       wallet,
       type: "streak_maintained",
-      timestamp: now - i * day + 14 * 3_600_000,
-      data: { day: 15 - i, pair: "SOL/USDC", volume: 800 + i * 120 },
+      timestamp: todayNoonUtc - i * day,
+      data: { day: 15 - i, pair: pairs[i % pairs.length], volume: 800 + i * 120, dex: "raydium" },
     });
   }
+
+  events.push({
+    id: "seed-share-7",
+    wallet,
+    type: "streak_shared",
+    timestamp: todayNoonUtc - 7 * day + 3 * hour,
+    data: { streak_length: 7 },
+  });
+  events.push({
+    id: "seed-share-14",
+    wallet,
+    type: "streak_shared",
+    timestamp: todayNoonUtc - 1 * day + 2 * hour,
+    data: { streak_length: 14 },
+  });
+  events.push({
+    id: "seed-referral",
+    wallet,
+    type: "referral_converted",
+    timestamp: todayNoonUtc - 3 * day + hour,
+    data: { referred_wallet: "0x11cc2233aabbffee", bonus_tickets: 1 },
+  });
+
   return events;
 }

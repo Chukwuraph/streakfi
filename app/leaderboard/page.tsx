@@ -5,6 +5,7 @@ import clsx from "clsx";
 import { useActiveWallet } from "@/components/ActiveWallet";
 import { TorqueBadge } from "@/components/TorqueBadge";
 import { useFocusRefresh } from "@/components/useFocusRefresh";
+import { useResetOnWallet } from "@/components/useResetOnWallet";
 
 interface Row {
   rank: number;
@@ -39,6 +40,7 @@ export default function LeaderboardPage() {
   }, [load]);
 
   useFocusRefresh(load);
+  useResetOnWallet(wallet, () => setData(null));
 
   return (
     <div className="pt-32 pb-24 px-6 max-w-7xl mx-auto">
