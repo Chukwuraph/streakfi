@@ -7,3 +7,7 @@ out
 *.log
 data/*.json
 !data/.gitkeep
+
+# local design comps (source material only)
+design/
+.npm-cache/
