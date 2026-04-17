@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import clsx from "clsx";
 import { useActiveWallet } from "@/components/ActiveWallet";
 import { TorqueBadge } from "@/components/TorqueBadge";
+import { useFocusRefresh } from "@/components/useFocusRefresh";
 
 interface StreakResponse {
   record: {
@@ -40,6 +41,8 @@ export default function HistoryPage() {
   useEffect(() => {
     load();
   }, [load]);
+
+  useFocusRefresh(load);
 
   const tradeDays = new Set(
     (data?.activity ?? [])

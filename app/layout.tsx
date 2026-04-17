@@ -1,9 +1,14 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import "./globals.css";
 import { SolanaWalletProvider } from "@/components/WalletProvider";
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
 import { TorqueBadge } from "@/components/TorqueBadge";
+import { ToastProvider } from "@/components/ToastProvider";
+import { ReferralTracker } from "@/components/ReferralTracker";
+import { OnboardingModal } from "@/components/OnboardingModal";
+import { WalletBootstrap } from "@/components/WalletBootstrap";
 
 export const metadata: Metadata = {
   title: "StreakFi | Trade Daily. Earn More.",
@@ -34,10 +39,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className="bg-background text-on-background min-h-screen pb-24">
         <SolanaWalletProvider>
-          <Navigation />
-          <main className="min-h-screen">{children}</main>
-          <TorqueBadge size="floating" />
-          <Footer />
+          <ToastProvider>
+            <Suspense fallback={null}>
+              <ReferralTracker />
+            </Suspense>
+            <WalletBootstrap />
+            <OnboardingModal />
+            <Navigation />
+            <main className="min-h-screen">{children}</main>
+            <TorqueBadge size="floating" />
+            <Footer />
+          </ToastProvider>
         </SolanaWalletProvider>
       </body>
     </html>

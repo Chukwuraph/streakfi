@@ -5,6 +5,8 @@ import { useCallback, useEffect, useState } from "react";
 import clsx from "clsx";
 import { useActiveWallet } from "@/components/ActiveWallet";
 import { TorqueBadge } from "@/components/TorqueBadge";
+import { useToast } from "@/components/ToastProvider";
+import { useFocusRefresh } from "@/components/useFocusRefresh";
 
 interface RaffleData {
   myTickets: number;
@@ -30,10 +32,10 @@ interface RebateData {
 
 export default function RewardsPage() {
   const { wallet } = useActiveWallet();
+  const { push } = useToast();
   const [raffle, setRaffle] = useState<RaffleData | null>(null);
   const [rebate, setRebate] = useState<RebateData | null>(null);
   const [claiming, setClaiming] = useState(false);
-  const [claimed, setClaimed] = useState(false);
 
   const load = useCallback(async () => {
     const [r, b] = await Promise.all([
@@ -48,24 +50,30 @@ export default function RewardsPage() {
     load();
   }, [load]);
 
+  useFocusRefresh(load);
+
   const claim = useCallback(async () => {
     if (!rebate || rebate.pending <= 0) return;
     setClaiming(true);
     try {
-      await fetch("/api/torque/events", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          wallet,
-          type: "streak_maintained",
-          data: { action: "reward_claim", amount: rebate.pending },
-        }),
+      const res = await fetch(`/api/rewards/claim?wallet=${wallet}`, { method: "POST" });
+      const json = await res.json();
+      if (!res.ok || !json.ok) {
+        push({ tone: "error", title: "Claim failed", body: json.error ?? "Try again in a moment." });
+        return;
+      }
+      push({
+        tone: "success",
+        title: `Claimed $${json.amount.toFixed(2)} USDC`,
+        body: "Distributed via Torque Protocol. reward_claimed event emitted.",
       });
-      setClaimed(true);
+      await load();
+    } catch {
+      push({ tone: "error", title: "Claim failed", body: "Network error." });
     } finally {
       setClaiming(false);
     }
-  }, [wallet, rebate]);
+  }, [wallet, rebate, push, load]);
 
   const chancePct = raffle?.chancePct ?? 0;
 
@@ -94,13 +102,15 @@ export default function RewardsPage() {
           <div className="mt-12">
             <button
               onClick={claim}
-              disabled={claiming || claimed || !rebate || rebate.pending <= 0}
+              disabled={claiming || !rebate || rebate.pending <= 0}
               className="w-full py-5 rounded-2xl streak-gradient text-on-primary-container font-black text-lg md:text-xl uppercase tracking-widest shadow-[0_10px_30px_rgba(49,49,192,0.4)] hover:shadow-[0_15px_40px_rgba(49,49,192,0.6)] active:scale-[0.98] transition-all flex items-center justify-center space-x-3 disabled:opacity-60"
             >
               <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>
                 account_balance_wallet
               </span>
-              <span>{claimed ? "Claimed ✓" : claiming ? "Claiming…" : "Claim Rewards"}</span>
+              <span>
+                {claiming ? "Claiming…" : !rebate || rebate.pending <= 0 ? "Nothing to Claim" : "Claim Rewards"}
+              </span>
             </button>
             <p className="text-center text-slate-500 text-xs mt-4 font-medium uppercase tracking-tighter">
               Distributed via Torque Protocol • Verified Yield

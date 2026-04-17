@@ -5,13 +5,16 @@ import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from "rea
 import { useSearchParams } from "next/navigation";
 import { useActiveWallet } from "@/components/ActiveWallet";
 import { TorqueBadge } from "@/components/TorqueBadge";
+import { useToast } from "@/components/ToastProvider";
 
 function ShareInner() {
   const { wallet } = useActiveWallet();
   const sp = useSearchParams();
+  const { push } = useToast();
   const cardRef = useRef<HTMLDivElement>(null);
   const [streak, setStreak] = useState<number>(Number(sp.get("streak")) || 0);
   const [rank, setRank] = useState<number | null>(null);
+  const [referralCode, setReferralCode] = useState<string>("");
   const [shared, setShared] = useState(false);
 
   useEffect(() => {
@@ -19,30 +22,53 @@ function ShareInner() {
     Promise.all([
       fetch(`/api/streak?wallet=${wallet}`).then((r) => r.json()),
       fetch(`/api/leaderboard?wallet=${wallet}`).then((r) => r.json()),
-    ]).then(([s, lb]) => {
+      fetch(`/api/wallet?wallet=${wallet}`).then((r) => r.json()),
+    ]).then(([s, lb, w]) => {
       if (cancelled) return;
       if (!Number(sp.get("streak"))) setStreak(s.streak?.currentStreak ?? 0);
       setRank(lb.you?.rank ?? null);
+      setReferralCode(w.record?.referralCode ?? wallet.slice(-6).toUpperCase());
     });
     return () => {
       cancelled = true;
     };
   }, [wallet, sp]);
 
+  const shareLink = useMemo(() => {
+    const base = process.env.NEXT_PUBLIC_APP_URL ?? "https://streakfi.app";
+    return referralCode ? `${base}?ref=${referralCode}` : base;
+  }, [referralCode]);
+
   const tweetUrl = useMemo(() => {
-    const text = `I'm on a 🔥 ${streak}-day DeFi streak on @streakfi — earning rewards powered by @torqueprotocol.\n\nJoin me: ${process.env.NEXT_PUBLIC_APP_URL ?? "https://streakfi.app"}\n\n#StreakFi #Torque`;
+    const text = `I'm on a 🔥 ${streak}-day DeFi streak on @streakfi — earning rewards powered by @torqueprotocol.\n\nJoin me: ${shareLink}\n\n#StreakFi #Torque`;
     return `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`;
-  }, [streak]);
+  }, [streak, shareLink]);
 
   const onShare = useCallback(async () => {
-    await fetch("/api/share", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ wallet, streakLength: streak }),
-    });
-    setShared(true);
-    window.open(tweetUrl, "_blank", "noopener,noreferrer");
-  }, [wallet, streak, tweetUrl]);
+    try {
+      await fetch("/api/share", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ wallet, streakLength: streak }),
+      });
+      setShared(true);
+      push({
+        tone: "success",
+        title: "Share event emitted",
+        body: "streak_shared custom event fired to Torque. Bonus ticket credited.",
+      });
+      window.open(tweetUrl, "_blank", "noopener,noreferrer");
+    } catch {
+      push({ tone: "error", title: "Share failed", body: "Network error." });
+    }
+  }, [wallet, streak, tweetUrl, push]);
+
+  const copyLink = useCallback(() => {
+    navigator.clipboard
+      .writeText(shareLink)
+      .then(() => push({ tone: "info", title: "Referral link copied", body: shareLink }))
+      .catch(() => push({ tone: "error", title: "Copy failed" }));
+  }, [shareLink, push]);
 
   return (
     <div className="pt-32 pb-24 px-6 max-w-5xl mx-auto">
@@ -99,17 +125,32 @@ function ShareInner() {
           </span>
           Share on X
         </button>
+        <button
+          onClick={copyLink}
+          className="flex-1 md:flex-initial px-10 py-4 rounded-2xl bg-surface-container-highest text-on-surface font-black uppercase tracking-tighter inline-flex items-center justify-center gap-3 border border-outline-variant/20"
+        >
+          <span className="material-symbols-outlined">link</span>
+          Copy Referral Link
+        </button>
         <Link
           href="/dashboard"
-          className="flex-1 md:flex-initial px-10 py-4 rounded-2xl bg-surface-container-highest text-on-surface font-black uppercase tracking-tighter inline-flex items-center justify-center gap-3"
+          className="flex-1 md:flex-initial px-10 py-4 rounded-2xl bg-surface-container text-on-surface-variant font-black uppercase tracking-tighter inline-flex items-center justify-center gap-3"
         >
           Back to Dashboard
         </Link>
       </div>
 
+      {referralCode && (
+        <p className="mt-6 text-center text-on-surface-variant text-xs">
+          Your referral code: <span className="font-mono font-black text-secondary">{referralCode}</span>
+          <br />
+          When a friend hits a 3-day streak via your link, Torque fires a <code className="text-secondary">referral_converted</code> event and you earn a bonus raffle ticket.
+        </p>
+      )}
+
       {shared && (
         <p className="mt-4 text-center text-tertiary font-black uppercase tracking-widest text-xs">
-          ✓ Share event emitted to Torque. Bonus raffle ticket pending.
+          ✓ Share event emitted to Torque.
         </p>
       )}
     </div>

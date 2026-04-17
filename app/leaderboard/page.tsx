@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import clsx from "clsx";
 import { useActiveWallet } from "@/components/ActiveWallet";
 import { TorqueBadge } from "@/components/TorqueBadge";
+import { useFocusRefresh } from "@/components/useFocusRefresh";
 
 interface Row {
   rank: number;
@@ -36,6 +37,8 @@ export default function LeaderboardPage() {
     const id = setInterval(load, 60_000);
     return () => clearInterval(id);
   }, [load]);
+
+  useFocusRefresh(load);
 
   return (
     <div className="pt-32 pb-24 px-6 max-w-7xl mx-auto">

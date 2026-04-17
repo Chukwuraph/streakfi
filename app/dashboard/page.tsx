@@ -6,6 +6,11 @@ import { StreakCounter } from "@/components/StreakCounter";
 import { TorqueBadge } from "@/components/TorqueBadge";
 import { MilestoneModal } from "@/components/MilestoneModal";
 import { useActiveWallet } from "@/components/ActiveWallet";
+import { useToast } from "@/components/ToastProvider";
+import { LiveCountdown } from "@/components/LiveCountdown";
+import { StreakAtRiskBanner } from "@/components/StreakAtRiskBanner";
+import { useFocusRefresh } from "@/components/useFocusRefresh";
+import { getStoredReferral, clearStoredReferral } from "@/components/ReferralTracker";
 
 interface StreakResponse {
   wallet: string;
@@ -40,6 +45,7 @@ const MILESTONES = [7, 14, 30, 60, 100];
 
 export default function DashboardPage() {
   const { wallet, isDemo } = useActiveWallet();
+  const { push } = useToast();
   const [data, setData] = useState<StreakResponse | null>(null);
   const [lb, setLb] = useState<LeaderboardResponse | null>(null);
   const [submitting, setSubmitting] = useState(false);
@@ -59,6 +65,8 @@ export default function DashboardPage() {
     fetchAll();
   }, [fetchAll]);
 
+  useFocusRefresh(fetchAll);
+
   useEffect(() => {
     if (!data) return;
     const s = data.streak.currentStreak;
@@ -70,17 +78,39 @@ export default function DashboardPage() {
 
   const recordTrade = useCallback(async () => {
     setSubmitting(true);
+    const referredBy = getStoredReferral();
     try {
-      await fetch("/api/streak", {
+      const res = await fetch("/api/streak", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ wallet, pair: "SOL/USDC", volume: 500 + Math.floor(Math.random() * 2000) }),
+        body: JSON.stringify({
+          wallet,
+          pair: "SOL/USDC",
+          volume: 500 + Math.floor(Math.random() * 2000),
+          referredBy,
+        }),
       });
+      const json = await res.json();
+      if (json.wasNew && referredBy) clearStoredReferral();
       await fetchAll();
+      push({
+        tone: "success",
+        title: `Streak day ${json.streak?.currentStreak ?? "—"} confirmed`,
+        body: `Torque event emitted. +1 raffle ticket, +$${(json.event?.data?.volume * 0.0005).toFixed(2)} rebate.`,
+      });
+      if (json.referralTorque) {
+        push({
+          tone: "info",
+          title: "Referral converted",
+          body: "Your referrer received a bonus raffle ticket.",
+        });
+      }
+    } catch {
+      push({ tone: "error", title: "Swap not recorded", body: "Try again in a moment." });
     } finally {
       setSubmitting(false);
     }
-  }, [wallet, fetchAll]);
+  }, [wallet, fetchAll, push]);
 
   const streakValue = data?.streak.currentStreak ?? 0;
   const status = data?.status ?? "new";
@@ -102,6 +132,8 @@ export default function DashboardPage() {
         </div>
       )}
 
+      <StreakAtRiskBanner status={status} />
+
       {/* Hero */}
       <section className="relative mb-12">
         <div className="absolute -top-20 -left-20 w-64 h-64 bg-primary-container/10 blur-[100px] rounded-full" />
@@ -120,8 +152,8 @@ export default function DashboardPage() {
                 <p className="text-xs font-bold text-on-surface-variant uppercase tracking-widest mb-1">
                   Momentum Deadline
                 </p>
-                <h2 className={`text-4xl md:text-5xl font-black tracking-tighter ${countdownTone}`}>
-                  {data?.countdown ?? "—"}
+                <h2 className={`text-4xl md:text-5xl font-black tracking-tighter font-mono ${countdownTone}`}>
+                  <LiveCountdown />
                 </h2>
                 <div className="w-full bg-surface-container-lowest h-2 rounded-full mt-4 overflow-hidden">
                   <div
